@@ -17,3 +17,9 @@ text as real or fake based on patterns in language.
 
 ## Status
 Project initialized. Dataset selection and preprocessing in progress.
+
+## Data Cleaning & Preprocessing
+The dataset was cleaned by removing an unnecessary index column and
+dropping rows with missing values. Article text was preprocessed by
+converting to lowercase, removing URLs, punctuation, numbers, and extra
+whitespace. This step prepares the data for NLP-based feature extraction.
