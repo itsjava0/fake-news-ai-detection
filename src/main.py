@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 
+from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
@@ -32,10 +33,12 @@ def main():
     X = df['clean_text']
     y= df['label']
 
-    #Train split
+    #Train / test split
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
+    X_test = X_test.reset_index(drop=True)
+    y_test = y_test.reset_index(drop=True)
 
     print('Training samples:', X_train.shape[0])
     print('Testing samples:', X_test.shape[0])
@@ -62,6 +65,23 @@ def main():
     print("\nModel Accuracy:",round(accuracy * 100,2), "%")
     print("\nClassification Report:\n")
     print(classification_report(y_test, y_pred))
+
+    #Confusin matrix
+    cm= confusion_matrix(y_test, y_pred)
+    print('Confusion matrix:')
+    print(cm)
+
+    #Inspect misclassified samples
+    misclassified_idx=y_test[y_test != y_pred].index
+    misclassified = pd.DataFrame({
+        "text": X_test.loc[misclassified_idx],
+        'label': y_test.loc[misclassified_idx],
+        'prediction': y_pred[misclassified_idx]
+    })
+
+    print('\nSample misclassified articles:')
+    print(misclassified.head(3))
+
 
 if __name__ == "__main__":
     main()
