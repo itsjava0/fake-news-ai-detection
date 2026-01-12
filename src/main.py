@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report
+from sklearn.linear_model import LogisticRegression
 
 def load_data():
     # Load dataset
@@ -28,9 +29,11 @@ def main():
     df = load_data()
     df = df.dropna()
     df["clean_text"]=df["text"].apply(clean_text)
+    df['clean_title']=df['title'].apply(clean_text)
+    df['combined_text']=df['clean_title']+" "+df['clean_text']
 
     #Features and labels 
-    X = df['clean_text']
+    X = df['combined_text']
     y= df['label']
 
     #Train / test split
@@ -60,11 +63,20 @@ def main():
     #Predictions
     y_pred = model.predict(X_test_tfidf)
 
+    #Logistic regression
+    lr_model = LogisticRegression(max_iter=1000)
+    lr_model.fit(X_train_tfidf, y_train)
+
+    y_pred_lr = lr_model.predict(X_test_tfidf)
+
     #Evaluation
     accuracy = accuracy_score(y_test, y_pred)
     print("\nModel Accuracy:",round(accuracy * 100,2), "%")
     print("\nClassification Report:\n")
     print(classification_report(y_test, y_pred))
+    print("\nLogistic Regression Performance:")
+    print("Accuracy:", round(accuracy_score(y_test, y_pred_lr)*100, 2), "%")
+    print(classification_report(y_test, y_pred_lr))
 
     #Confusin matrix
     cm= confusion_matrix(y_test, y_pred)
