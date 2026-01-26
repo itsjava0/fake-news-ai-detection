@@ -1,5 +1,7 @@
 import pandas as pd
 import re
+import joblib
+import os
 
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
@@ -93,6 +95,28 @@ def main():
 
     print('\nSample misclassified articles:')
     print(misclassified.head(3))
+
+    #Save model and vectorizer
+    os.makedirs("models", exist_ok=True)
+
+    joblib.dump(lr_model, "models/logistic_model.joblib")
+    joblib.dump(vectorizer, "models/tfidf_vectorizer.joblib")
+
+    #Load saved model and vectorizer
+    loaded_model=joblib.load('models/logistic_model.joblib')
+    loaded_vectorizer = joblib.load('models/tfidf_vectorizer.joblib')
+
+    sample_text="Breaking news: Scientists discover a miracle cure the government doesn't want you to know about."
+
+    sample_clean = clean_text(sample_text)
+    sample_vec = loaded_vectorizer.transform([sample_clean])
+
+    prediction = loaded_model.predict(sample_vec)[0]
+
+    print("\nSample Prediction:")
+    print("Text:", sample_text)
+    print('Prediction:', 'fake news' if prediction == 1 else "Real News")
+
 
 
 if __name__ == "__main__":
