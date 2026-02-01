@@ -106,16 +106,26 @@ def main():
     loaded_model=joblib.load('models/logistic_model.joblib')
     loaded_vectorizer = joblib.load('models/tfidf_vectorizer.joblib')
 
-    sample_text="Breaking news: Scientists discover a miracle cure the government doesn't want you to know about."
+    print("\n--- Fake News Detector (CLI) ---")
+    while True:
+        user_input = input("\nEnter a news article (or type 'exit' to quit):\n")
+        if user_input.lower()=="exit":
+            print("Exiting Fake News Detector. Goodbye!")
+            break
+        #Clean and transform user input
+        user_clean = clean_text(user_input)
+        user_velc = loaded_vectorizer.transform([user_clean])
 
-    sample_clean = clean_text(sample_text)
-    sample_vec = loaded_vectorizer.transform([sample_clean])
+        #make prediction
+        prediction= loaded_model.predict(user_vec)[0]
 
-    prediction = loaded_model.predict(sample_vec)[0]
+        #Display result
+        print("Prediction:", 'Fake News' if prediction ==1 else 'Real News')
 
-    print("\nSample Prediction:")
-    print("Text:", sample_text)
-    print('Prediction:', 'fake news' if prediction == 1 else "Real News")
+    
+
+
+   
 
 
 
