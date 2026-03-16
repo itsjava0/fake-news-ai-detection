@@ -1,3 +1,8 @@
+from preprocess import clean_text
+from train import train_model
+from evaluate import evaluate_model
+from predict import predict_news
+
 import pandas as pd
 import re
 import joblib
@@ -9,6 +14,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.linear_model import LogisticRegression
+
 
 def load_data():
     # Load dataset
@@ -114,7 +120,7 @@ def main():
             break
         #Clean and transform user input
         user_clean = clean_text(user_input)
-        user_velc = loaded_vectorizer.transform([user_clean])
+        user_vec = loaded_vectorizer.transform([user_clean])
 
         #make prediction
         prediction= loaded_model.predict(user_vec)[0]
