@@ -107,6 +107,19 @@ This allows:
     bash:
         python src/main.py
 
+## Instalation
+
+Clone the repository:
+    git clone https://github.com/itsjava0/fake-news-ai-detection.git
+    cd fake-news-ai-detection
+
+Create virtual environment:
+    python -m venv venv
+    venv\Scripts\activate
+
+Install dependencies:
+    pip install -r requirements.txt
+
 ## Limitations
 -Dataset is domain-specific (mostly political news)
 -TF-IDF ignores word order and deep semantic meaning
