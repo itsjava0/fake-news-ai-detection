@@ -1,8 +1,3 @@
-from preprocess import clean_text
-from train import train_model
-from evaluate import evaluate_model
-from predict import predict_news
-
 import pandas as pd
 import re
 import joblib
@@ -15,6 +10,12 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.linear_model import LogisticRegression
 
+from preprocess import clean_text
+from train import train_model
+from evaluate import evaluate_model
+from predict import predict_news
+
+
 
 def load_data():
     # Load dataset
@@ -25,12 +26,6 @@ def load_data():
     
     return df
 
-def clean_text(text):
-    text = text.lower()
-    text = re.sub(r"http\S+", "", text)      # remove URLs
-    text = re.sub(r"[^a-z\s]", "", text)     # remove punctuation & numbers
-    text = re.sub(r"\s+", " ", text)         # remove extra spaces
-    return text.strip()
 
 def main():
     # Load and clean data
@@ -58,7 +53,8 @@ def main():
     vectorizer = TfidfVectorizer(
         max_df=0.7,
         min_df=5,
-        stop_words="english"
+        stop_words="english",
+        ngram_range=(1,2)
     )
 
     X_train_tfidf=vectorizer.fit_transform(X_train)
@@ -112,22 +108,23 @@ def main():
     loaded_model=joblib.load('models/logistic_model.joblib')
     loaded_vectorizer = joblib.load('models/tfidf_vectorizer.joblib')
 
-    print("\n--- Fake News Detector (CLI) ---")
+
+    #CLI
+    print("\n==============================")
+    print("   Fake News Detector (CLI)")
+    print("==============================")
+
     while True:
-        user_input = input("\nEnter a news article (or type 'exit' to quit):\n")
-        if user_input.lower()=="exit":
-            print("Exiting Fake News Detector. Goodbye!")
+        user_input = input("\nEnter a news article (or type 'exit' to quit):\n> ")
+
+        if user_input.lower() == "exit":
+            print("\nExiting... Goodbye!")
             break
-        #Clean and transform user input
-        user_clean = clean_text(user_input)
-        user_vec = loaded_vectorizer.transform([user_clean])
 
-        #make prediction
-        prediction= loaded_model.predict(user_vec)[0]
+        label, confidence = predict_news(loaded_model, loaded_vectorizer, user_input)
 
-        #Display result
-        print("Prediction:", 'Fake News' if prediction ==1 else 'Real News')
-
+        print("\nPrediction:", label)
+        print("Confidence:", confidence, "%")
     
 
 
@@ -137,4 +134,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-      
