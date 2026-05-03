@@ -1,10 +1,10 @@
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
 def evaluate_model(model, X_test, y_test):
+    """Evaluate model and print accuracy, classification report and confusion matrix"""
     predictions=model.predict(X_test)
 
     accuracy=accuracy_score(y_test, predictions)
-    
     print("\nModel Accuracy:", round(accuracy*100, 2), "%")
     
     print("\nClassification Report:\n")

@@ -1,7 +1,11 @@
+from preprocess import clean_text
+
 def predict_news(model, vectorizer, text):
+    """Return (label, confidence%) for a raw news article string"""
     if not isinstance(text, str) or text.strip() == "":
         return 'Invalid input', 0.0
     
+    text=clean_text(text)
     text_vector =vectorizer.transform([text])
 
     prediction=model.predict(text_vector)[0]
