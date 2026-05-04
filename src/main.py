@@ -14,7 +14,7 @@ from predict import predict_news
 def load_data():
     """Load and return the fake news dataset."""
     df = pd.read_csv("data/fake_news.csv")
-    df = df.drop(columns=["Unnamed: 0"])
+    df = df.drop(columns=["Unnamed: 0"], errors="ignore")
     return df
 
 
@@ -59,10 +59,6 @@ def main():
     joblib.dump(lr_model, "models/logistic_model.joblib")
     joblib.dump(vectorizer, "models/tfidf_vectorizer.joblib")
 
-    # Load saved model and vectorizer
-    loaded_model = joblib.load("models/logistic_model.joblib")
-    loaded_vectorizer = joblib.load("models/tfidf_vectorizer.joblib")
-
     # CLI
     print("\n==============================")
     print("   Fake News Detector (CLI)")
@@ -75,7 +71,7 @@ def main():
             print("\nExiting... Goodbye!")
             break
 
-        label, confidence = predict_news(loaded_model, loaded_vectorizer, user_input)
+        label, confidence = predict_news(lr_model, vectorizer, user_input)
 
         print("\nPrediction:", label)
         print("Confidence:", confidence, "%")
