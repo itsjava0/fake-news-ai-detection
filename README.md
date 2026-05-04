@@ -55,19 +55,19 @@ Chosen for:
 ## Results
 
 ### Logistic Regression Performance
-- **Accuracy: ~88%**
+- **Accuracy: ~95%**
 
 Precision / Recall / F1-score:
 
-| Class | Precision | Recall |
-|---|---|---|
-| Real News (0) | 0.88 | 0.87 |
-| Fake News (1) | 0.89 | 0.89 |
+| Class | Precision | Recall | F1 |
+|---|---|---|---|
+| Real News (0) | 0.96 | 0.94 | 0.95 |
+| Fake News (1) | 0.95 | 0.96 | 0.95 |
 
 ### Confusion Matrix
 ```
-[[6189  892]
- [ 806 6421]]
+[[6599  407]
+ [ 282 7020]]
 ```
 
 The model shows balanced performance across both classes, indicating reliability and low bias.
