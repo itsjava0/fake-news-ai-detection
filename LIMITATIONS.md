@@ -9,7 +9,7 @@ I think it's important to be upfront about this stuff instead of just showing th
 
 The training data is from a specific period (around 2016-2018 political news).
 So if you give it a news article from 2025 or 2026 with new names, new events, or new topics
-it has never seen before — it kind of falls apart. I literally tested this and it called a real
+it has never seen before — it kind of falls apart.
 2026 news article fake with only 59% confidence. That's basically a coin flip.
 
 ---
